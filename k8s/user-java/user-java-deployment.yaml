@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-java
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: user-java
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-java
+    spec:
+      containers:
+      - name: user-java
+        image: registrysuh5998.azurecr.io/tripinsights/user-java:1.0
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-creds
+              key: username
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-creds
+              key: password
+        - name: SQL_SERVER
+          value: "sqlserversuh5998.database.windows.net"
+        - name: SQL_DBNAME
+          value: "mydrivingDB"
+        ports:
+        - containerPort: 80
