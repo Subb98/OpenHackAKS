@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: userprofile
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: userprofile
+    spec:
+      containers:
+        - name: userprofile
+          image: registrysuh5998.azurecr.io/tripinsights/userprofile:1.0
+          env:
+          - name: SQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-creds
+                key: username
+          - name: SQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-creds
+                key: password
+          - name: SQL_SERVER
+            value: "sqlserversuh5998.database.windows.net"
+          - name: SQL_DBNAME
+            value: "mydrivingDB"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userprofile-service
+  namespace: dev
+  labels:
+    app: userprofile
+spec:
+  ports:
+    - port: 8080
+      targetPort: 80
+  selector:
+    app: userprofile
