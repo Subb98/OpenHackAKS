@@ -40,7 +40,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: db-creds
-              key: password1
+              key: password
         - name: SQL_SERVER
           value: 'sqlserversuh5998.database.windows.net'
         - name: SQL_DBNAME

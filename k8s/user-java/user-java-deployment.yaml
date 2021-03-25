@@ -16,12 +16,16 @@ spec:
       containers:
       - name: user-java
         image: registrysuh5998.azurecr.io/tripinsights/user-java:1.0
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
         env:
         - name: SQL_USER
           valueFrom:
             secretKeyRef:
               name: db-creds
-              key: username
+              key: User
         - name: SQL_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -33,3 +37,12 @@ spec:
           value: "mydrivingDB"
         ports:
         - containerPort: 80
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kvname"
+            nodePublishSecretRef:                       # Only required when using service principal mode
+              name: secrets-store-creds                 # Only required when using service principal mode. The name of the Kubernetes secret that contains the service principal credentials to access keyvault.
