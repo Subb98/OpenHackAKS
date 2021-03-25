@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: poi
-  namespace: dev
+  namespace: api
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -67,7 +67,7 @@ metadata:
   labels:
     app: poi
   name: poi
-  namespace: dev
+  namespace: api
 spec:
   ports:
   - name: web
@@ -87,4 +87,4 @@ kind: Secret
 metadata:
   creationTimestamp: null
   name: db-creds
-  namespace: dev
+  namespace: api

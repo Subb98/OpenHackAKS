@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tripviewer
-  namespace: dev
+  namespace: web
 spec:
   selector:
     matchLabels:
@@ -20,7 +20,7 @@ spec:
         - containerPort: 80
         env:
         - name: USERPROFILE_API_ENDPOINT
-          value: "http://userprofile-service.dev.svc.cluster.local:8080"
+          value: "http://userprofile-service.api.svc.cluster.local:8080"
         - name: TRIPS_API_ENDPOINT
-          value: "http://trips-service.dev.svc.cluster.local:8080"
+          value: "http://trips-service.api.svc.cluster.local:8080"
 
