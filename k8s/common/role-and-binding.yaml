@@ -1,8 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: dev-user-full-access
-  namespace: dev
+  name: default-user-full-access
 rules:
 - apiGroups: ["", "extensions", "apps"]
   resources: ["*"]
@@ -11,13 +10,42 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: dev-user-access
-  namespace: dev
+  name: default-user-access
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: dev-user-full-access
+  name: default-user-full-access
 subjects:
 - kind: Group
-  namespace: dev
   name: 5ebac098-915c-49de-82ca-ccadf8a59f12
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-user-edit-access
+  namespace: web
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+- kind: Group
+  namespace: web
+  name: 54312d26-a38f-4825-9ded-c1427695d59d
+  
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-user-view-access
+  namespace: api
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+- kind: Group
+  namespace: api
+  name: 54312d26-a38f-4825-9ded-c1427695d59d
