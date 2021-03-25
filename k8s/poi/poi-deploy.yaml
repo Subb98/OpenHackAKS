@@ -26,17 +26,21 @@ spec:
       - image: registrysuh5998.azurecr.io/tripinsights/poi:1.0
         imagePullPolicy: IfNotPresent
         name: poi
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
         env:
         - name: SQL_USER
           valueFrom:
             secretKeyRef:
               name: db-creds
-              key: username
+              key: User
         - name: SQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: db-creds
-              key: password
+              key: password1
         - name: SQL_SERVER
           value: 'sqlserversuh5998.database.windows.net'
         - name: SQL_DBNAME
@@ -60,3 +64,12 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kvname"
+            nodePublishSecretRef:                       # Only required when using service principal mode
+              name: secrets-store-creds                 # Only required when using service principal mode. The name of the Kubernetes secret that contains the service principal credentials to access keyvault.
