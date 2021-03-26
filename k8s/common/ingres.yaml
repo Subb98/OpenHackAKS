@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: api-ingress
+  namespace: api
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "false"
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: poi
+          servicePort: 8080
+        path: /api/poi
+      - backend:
+          serviceName: trips-service
+          servicePort: 8080
+        path: /api/trips(/|$)(.*)
+      - backend:
+          serviceName: userprofile-service
+          servicePort: 8080
+        path: /api/user
+      - backend:
+          serviceName: user-java
+          servicePort: 8080
+        path: /api/user-java
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: tripviewer-ingress
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "false"
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: tripviewer
+          servicePort: 8080
+        path: /
